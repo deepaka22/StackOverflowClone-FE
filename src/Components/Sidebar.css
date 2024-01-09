@@ -1,0 +1,22 @@
+#mySidebar{
+    margin-top: 2rem;
+    border-right: 0.1px solid black !important;
+    border-bottom: 0.1px solid black !important; 
+    box-shadow: 5px;
+    height: 25%;
+}
+
+#imageAddress{
+    height: 50px;
+    margin-left: -20px;
+    /* width: 10%; */
+}
+#navbarhead{
+    /* margin-top: -80px; */
+    margin-left: -10px;
+    height: 50px;
+}
+#navbtn{
+    /* padding-left: ; */
+    width: 45%;
+}
