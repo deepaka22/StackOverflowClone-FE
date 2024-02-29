@@ -39,7 +39,7 @@ const ResetPassword = ()=>{
              // -------------------------success response--------------------
                 if(response.message === "password Changed successfully") {
                   setErrorNote({message:response.message, changes: 1});
-                  setTimeout(()=>{navigatePg("/Dashboard")},2000);
+                  setTimeout(()=>{navigatePg("/")},2000);
                   }else{
                   setErrorNote({message:response.message, changes: 1});
                   }
