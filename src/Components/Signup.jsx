@@ -1,7 +1,53 @@
 
+import { useState } from "react";
 import "./Loginpage.css";
+import { useNavigate } from "react-router-dom";
 
 const Signup = ()=>{
+
+const navigate= useNavigate();
+
+const [userName, setuserName] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassord ] = useState("");
+const [Spinner, Setspinner] = useState(1);
+const [errorNote, setErrorNote] = useState({message : "", changes:0});
+const [clearedNote, setclearedNote] = useState(0);
+
+
+
+const formHandler= async (e)=>{
+ e.preventDefault();
+  console.log(e);
+  console.log("from console.log",userName, email, password);
+  const request = await fetch("https://stackoverflowclone-63mv.onrender.com/users/signup", { method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+
+  body: JSON.stringify({
+    "name":userName,
+    "email": email,
+    "password": password
+  })})
+
+  const response = await request.json();
+  console.log(response);
+
+    // -------------------------Spinner response--------------------
+    if(response) Setspinner(!Spinner);
+    // -------------------------invalid info response--------------------
+    if(response.message === "User aldready exists") setErrorNote({message:`${response.message}. Kindly login` + "" , changes: 1});
+     // -------------------------logged in response--------------------
+    if(response.data.acknowledged === true) {
+      setclearedNote(1);
+      setTimeout(()=>{
+        navigate("/");
+      },2000)  
+      }
+}
+
+
     return(
         <div id="sectionbg">
             <section class="vh-200">
@@ -22,7 +68,7 @@ const Signup = ()=>{
     <span id="forgotPassAnch1">Get Stack Overflow for Teams free for up to 50 users.</span></div>
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <form className="mt-4">
+        <form className="mt-4" onSubmit={(e)=>{formHandler(e)}}>
           {/* <--Google  btn --> * */} 
         <div class=" shadow mb-3  d-grid gap-2" >
       <button  class=" btn btn-light flex--item s-btn s-btn__icon s-btn__google bar-md ba bc-black-225" data-provider="google" data-oauthserver="https://accounts.google.com/o/oauth2/auth" data-oauthversion="2.0">
@@ -46,6 +92,15 @@ const Signup = ()=>{
             <svg aria-hidden="true" class="svg-icon iconFacebook" id="svgicon" width="18" height="18" viewBox="0 0 18 18"><path fill="#4167B2" d="M3 1a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H3Zm6.55 16v-6.2H7.46V8.4h2.09V6.61c0-2.07 1.26-3.2 3.1-3.2.88 0 1.64.07 1.87.1v2.16h-1.29c-1 0-1.19.48-1.19 1.18V8.4h2.39l-.31 2.42h-2.08V17h-2.5Z"></path></svg>
                 Log in with Facebook </button>
             </div>
+{/* <--Error notes --> */}
+{ errorNote.changes ? 
+            <div className="alert alert-danger text-center mt-4" role="alert">
+              <b>{errorNote.message}</b>
+            </div> : null}
+{ clearedNote ? 
+            <div className="alert alert-success text-center mt-4" role="alert">
+              <b>{"user Created Successfully"}</b>
+            </div> : null}
            </div>
 
         <div class="card shadow-lg " id="sectionbg1">
@@ -55,7 +110,8 @@ const Signup = ()=>{
 
 <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label mb-2"><b>Display name</b></label>
-    <input type="email" class="form-control" id="exampleFormControlInput1" aria-describedby="emailHelp"/>
+    <input type="name" class="form-control" id="exampleFormControlInput1" aria-describedby="emailHelp" required
+    onChange={(e)=>{setuserName(e.target.value)}} />
   </div>
 
 
@@ -63,24 +119,28 @@ const Signup = ()=>{
 
             <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label mb-2"><b>Email</b></label>
-    <input type="email" class="form-control" id="exampleFormControlInput1" aria-describedby="emailHelp"/>
+    <input type="email" class="form-control" id="exampleFormControlInput1" aria-describedby="emailHelp" required
+    onChange={(e)=>{setEmail(e.target.value)}}/>
   </div>
 
   {/* <--Password--> */}
   
           <div class=" mb-3 ">
           <label for="exampleFormControlInput1" class="form-label  mb-2"><b>Password</b></label>         
-          <input type="password" id="exampleFormControlInput1" class="form-control " />
+          <input type="password" id="exampleFormControlInput1" class="form-control " required
+           onChange={(e)=>{setPassord(e.target.value)}} />
           <div id="font-twinner" className="mt-2">Passwords must contain at least eight characters, including at least 1 letter and 1 number.</div>
             </div>
 
          {/* <--button--> */}
 
             <div class=" mb-3 d-grid gap-2">
-            <button class="btn btn-primary" type="button">Sign up</button>
+            <button class="btn btn-primary" type={"submit"} onClick={()=>{Setspinner(!Spinner)}}>
+            {Spinner ? "Sign up" : <span class="spinner-border text-light spinner-border-sm" role="status" aria-hidden="true">
+                         </span>}
+            </button>
             </div>
 
-          
           </div>
 
         </div>

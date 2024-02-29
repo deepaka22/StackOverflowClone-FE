@@ -9,15 +9,15 @@ const Sidebar = ()=>{
 
     return(
         <div style={{marginRight:"1rem"}}>
-<button type="button" class=" btn btn-outline-dark btn-lg"
+<button type="button" className=" btn btn-outline-dark btn-lg"
  onClick={()=>{setDisplay(!displayed)}}>
 {displayed == 0 ? "☰"  : "X"} 
 </button>
 
-<div class=" shadow w3-sidebar w3-bar-block w3-border-right"  style={styling} id="mySidebar">
-  <a href="#" class="w3-bar-item w3-button">Link 1</a>
-  <a href="#" class="w3-bar-item w3-button">Link 2</a>
-  <a href="#" class="w3-bar-item w3-button">Link 3</a>
+<div className=" shadow w3-sidebar w3-bar-block w3-border-right"  style={styling} id="mySidebar">
+  <a href="#" className="w3-bar-item w3-button">Home</a>
+  <a href="#" className="w3-bar-item w3-button">Questions</a>
+  <a href="#" className="w3-bar-item w3-button">Tags</a>
 </div>
         </div>
     )
