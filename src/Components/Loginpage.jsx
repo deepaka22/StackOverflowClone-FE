@@ -8,6 +8,8 @@ const Loginpage = () => {
   const [password, setPassord] = useState("");
   const [Spinner, Setspinner] = useState(1);
   const [errorNote, setErrorNote] = useState({message : "", changes:0});
+  const [loggeduserinfo, setloggeduserinfo] = useState();
+  const [username, setusername] = useState();
   const navigatePg = useNavigate();
 
   const formHandler = async (e) => {
@@ -25,12 +27,16 @@ const Loginpage = () => {
          "password": password
        })
      })
+
      const response = await request.json();
+
+     const responseData = await response.logedUserData;
  
-     // console.log(response);
+     console.log(responseData, "from response data" );
      // -------------------------Spinner response--------------------
      if (response) {
        Setspinner(!Spinner)
+      //  setusername (response.logedUserData);
      }
      // -------------------------invalid info response--------------------
      if (response.message==="user does not exists"  
@@ -40,18 +46,25 @@ const Loginpage = () => {
      }
      // request is sent and if the response is 201, then navigate to Getdetails pg, and set the token rec from BE
      // -------------------------logged in response--------------------
-     if(response.loginStatus=="Sucessfully logged in") {
+     if(response.loginStatus=="Sucessfully logged in") {    
        localStorage.setItem("x-auth-token", response.generatedToken);
+       localStorage.setItem("_id", responseData._id);
+       localStorage.setItem("name", responseData.name);
+
        setErrorNote({message:response.loginStatus, changes: 1});
-       navigatePg("/Dashboard");
-     }
+       setloggeduserinfo(response);
+       navigatePg(`/users/${responseData._id}/${responseData.name}`); 
+       window.location.reload();
+       
+      //  
+      }
    } catch (error) {
     console.log(error);
    }
   }
     // -------------------------use Effect is used if the user is aldreay logged in..--------------------
   useEffect(()=>{
-    if(localStorage.getItem("x-auth-token")) navigatePg("/Dashboard")
+    if(localStorage.getItem("x-auth-token")) navigatePg("/usersinformations" )
   },[])
 
   //------------------------End of requests---------------------------------------------
